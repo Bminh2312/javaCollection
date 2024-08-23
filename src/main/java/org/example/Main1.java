@@ -1,9 +1,10 @@
 package org.example;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Main1 {
     public static void main(String[] args) {
@@ -53,5 +54,82 @@ public class Main1 {
         }
         System.out.println("Stream");
         points.stream().filter(point -> point.getX()> 3).forEach(System.out::println);
+
+        System.out.println("#######################");
+        List<String> names = Arrays.asList("John","Alice","Bob","Anna");
+
+        //Lọc các tên bắt đầu bằng chữ A
+        names.stream()
+                .filter(name -> name.startsWith("A") )
+                .forEach(System.out::println);
+
+        List<String> filteredNames =  names.stream()
+                .filter(name -> name.startsWith("A") )
+                .map(String::toUpperCase)
+                .sorted()
+                .collect(Collectors.toList());
+        System.out.println(filteredNames);
+
+        //Ánh xạ các tên thành chữ hoa
+        names.stream()
+                .map(String::toUpperCase)
+                .forEach(System.out::println);
+        System.out.println("#Sorted#");
+        names.stream()
+                .sorted()
+                .forEach(System.out::println);
+        System.out.println("#reverseOrder#");
+        //Sắp xếp theo thứ tự giảm dần
+        names.stream()
+                .sorted(Comparator.reverseOrder())
+                .forEach(System.out::println);
+
+        System.out.println("#Sum#");
+        List<Integer> numbers = Arrays.asList(1,2,3,4,5);
+        int sum = numbers.stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+        System.out.println("Sum: "+sum );
+        System.out.println("#AVR#");
+        double avr = numbers.stream()
+                .mapToInt(Integer::intValue)
+                .average()
+                .orElse(0);
+        System.out.println("AVR: "+avr);
+
+        System.out.println("#Tìm giá trị lớn nhất#");
+        OptionalInt max = numbers.stream()
+                .mapToInt(Integer::intValue)
+                .max();
+        System.out.println("Max: " + (max.isPresent() ?max.getAsInt():"Not present"));
+
+        System.out.println("#Tìm giá trị nhỏ nhất#");
+        OptionalInt min = numbers.stream()
+                .mapToInt(Integer::intValue)
+                .min();
+        System.out.println("Min: " + (min.isPresent() ?min.getAsInt():"Not present"));
+
+        System.out.println("#Sử dụng reduce để tính tổng#");
+        int sum1 = numbers.stream()
+                .reduce(0,Integer::sum);
+        System.out.println("Sum: " + sum1);
+
+        System.out.println("#Sử dụng reduce để tìm tích#");
+        int product = numbers.stream()
+                .reduce(1,(a,b) -> a*b);
+
+        System.out.println("Prodcut using reduce: "+ product);
+
+        List<List<String>> listOfLists = Arrays.asList(
+                Arrays.asList("a","b","c"),
+                Arrays.asList("d","e","f"),
+                Arrays.asList("g","h","i")
+        );
+
+        System.out.println("#Sử dụng flatmap để kết hợp các danh sách con thành 1 danh sách#");
+        List<String> combinedList = listOfLists.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+        System.out.println(combinedList);
     }
 }
